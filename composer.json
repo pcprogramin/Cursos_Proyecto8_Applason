@@ -1,0 +1,16 @@
+{
+    "name": "root/cursos_proyecto8_applason",
+    "autoload": {
+        "psr-4": {
+            "MVC\\":"./",
+            "Controllers\\":"./controllers",
+            "Model\\":"./models"
+        }
+    },
+    "authors": [
+        {
+            "name": "Prudencio"
+        }
+    ],
+    "require": {}
+}
