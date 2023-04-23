@@ -63,6 +63,7 @@ class ActiveRecord {
     // Identificar y unir los atributos de la BD
     public function atributos() {
         $atributos = [];
+
         foreach(static::$columnasDB as $columna) {
             if($columna === 'id') continue;
             $atributos[$columna] = $this->$columna;
@@ -72,6 +73,7 @@ class ActiveRecord {
 
     // Sanitizar los datos antes de guardarlos en la BD
     public function sanitizarAtributos() {
+
         $atributos = $this->atributos();
         $sanitizado = [];
         foreach($atributos as $key => $value ) {
@@ -92,6 +94,7 @@ class ActiveRecord {
     // Registros - CRUD
     public function guardar() {
         $resultado = '';
+        
         if(!is_null($this->id)) {
             // actualizar
             $resultado = $this->actualizar();
@@ -115,7 +118,11 @@ class ActiveRecord {
         $resultado = self::consultarSQL($query);
         return array_shift( $resultado ) ;
     }
-
+    public static function where($columna,$valor) {
+        $query = "SELECT * FROM " . static::$tabla  ." WHERE ${columna} ='${valor}'";
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado ) ;
+    }
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT ${limite}";
@@ -134,8 +141,6 @@ class ActiveRecord {
         $query .= " ) VALUES (' "; 
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
-
-        // Resultado de la consulta
         $resultado = self::$db->query($query);
         return [
            'resultado' =>  $resultado,
