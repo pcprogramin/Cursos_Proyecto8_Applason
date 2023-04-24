@@ -47,13 +47,13 @@ class LoginController{
             $alertas = $auth->validarEmail();
             if (empty($alertas)){
                 $usuario = Usuario::where('email',$auth->email);
-                if ($usuario && $usuario->confirmardo === '1'){
+                if ($usuario && $usuario->confirmado === '1'){
                     $usuario->crearToken();
                     $usuario->guardar();
 
                     $email= new Email($usuario->nombre,$usuario->email,$usuario->token);
                     $email->enviarInstrucciones();
-                    Usuario::setAlerta('existo',"Revisa tu email");
+                    Usuario::setAlerta('exito',"Revisa tu email");
                 }else{
                     Usuario::setAlerta('error','El usuario no existe o no esta confirmado');
                 }
@@ -77,7 +77,17 @@ class LoginController{
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $password = new Usuario ($_POST);
-            
+            $alertas = $password->validarPassword();
+            if(empty($alertas)){
+                $usuario->password = null;
+                $usuario->password = $password->password;
+                $usuario->hashPassword();
+                $usuario->token = null;
+                $resultado=$usuario->guardar();
+                if($resultado){
+                    header('Location:/');
+                }
+            }
         }
         $router->render('auth/recuperar-pasword',[
             'alertas'=>$alertas,
@@ -100,7 +110,7 @@ class LoginController{
                     $usuario->hashPassword();
                     $usuario->crearToken();
 
-                    $email = new Email($usuario->email,$usuario->nombre,$usuario->token);
+                    $email = new Email($usuario->nombre,$usuario->email,$usuario->token);
                     $email ->enviarConfirmacion();
 
                     $resultado = $usuario->guardar();
