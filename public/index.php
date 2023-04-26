@@ -27,6 +27,6 @@ $router->get ('/cita',[CitaController::class,'index']);
 
 
 $router->get('/api/servicios',[ApiController::class,'index']);
-
+$router->post('/api/citas',[ApiController::class,'guardar']);
 
 $router->comprobarRutas();

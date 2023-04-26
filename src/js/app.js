@@ -201,13 +201,10 @@ function mostrarResumen(){
 
     const {nombre,fecha,hora,servicios} = cita;
 
-    const nombreCliente = document.createElement('P');
-    nombreCliente.innerHTML=`<span>Nombre:</span>${nombre}`;
-    const fechaCita = document.createElement('P');
-    nombreCliente.innerHTML=`<span>Nombre:</span>${fecha}`;
-    const horaCita = document.createElement('P');
-    nombreCliente.innerHTML=`<span>Hora:</span>${hora}`;
-
+    const headingServicios = document.createElement("H3");
+    headingServicios.textContent='Resumen de Servicios';
+    resumen.appendChild(headingServicios);
+   
     servicios.forEach(servicio => {
         const {id,precio,nombre}= servicio;
         const contenedorServicio = document.createElement('DIV');
@@ -219,12 +216,59 @@ function mostrarResumen(){
 
         contenedorServicio.appendChild(textServicio);
         contenedorServicio.appendChild(precioServicio);
+    
         resumen.appendChild(contenedorServicio);
 
-    })
+    });
+    
+    const nombreCliente = document.createElement('P');
+    nombreCliente.innerHTML=`<span>Nombre:</span>${nombre}`;
+
+    const fechaObj = new Date(fecha);
+    const mes = fechaObj.getMonth()
+    const dia = fechaObj.getDate() ;
+    const year = fechaObj.getFullYear();
+    const fechaUTC = new Date(Date.UTC(year,mes,dia));
+    const opciones = {weekday:'long',year:'numeric',month:'long',day:'numeric'}
+    const fechaFormateada = fechaUTC.toLocaleDateString('es-ES',opciones);
+    const fechaCita = document.createElement('P');
+    fechaCita.innerHTML=`<span>Fecha:</span>${fechaFormateada}`;
+    const horaCita = document.createElement('P');
+    horaCita.innerHTML=`<span>Hora:</span>${hora} H`;
+
+    const headingCita = document.createElement("H3");
+    headingCita.textContent='Resumen de Cita';
+    resumen.appendChild(headingCita);
+
+    const botonReservar = document.createElement('BUTTON');
+    botonReservar.classList.add('boton');
+    botonReservar.textContent ='Reservar Cita';
+    botonReservar.onclick =  reservarCita;
+
     resumen.appendChild(nombreCliente);
     resumen.appendChild(fechaCita);
     resumen.appendChild(horaCita);
+    resumen.appendChild(botonReservar)
+}
+
+async function reservarCita(){
+    const {nombre,fecha,hora, servicios}=cita;
+
+    const idServicios = servicios.map(servicio => servicio.id);
+
+    const datos = new FormData();
+    datos.append('nombre',nombre);
+    datos.append('fecha',fecha);
+    datos.append('hora',hora);
+    datos.append('servicios',idServicios);
+    
+    const url = 'http://localhost:3000/api/citas';
+
+    const respuesta = await fetch(url,{
+        method:'POST',
+        body: datos
+    });
+    const resultado = await respuesta.json();
 
 }
 
