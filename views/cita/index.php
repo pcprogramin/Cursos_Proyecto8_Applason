@@ -1,6 +1,6 @@
 <h1 class="nombre-pagina">Crear Nueva Cita</h1>
 <p class="descripcion-pagina">Elige tus servicios y coloca tus datos</p>
-
+<?php include __DIR__.'/../templates/barra.php' ?>
 <div id="app">
     <nav class="tabs">
         <button class="actual" type="boton" data-paso="1">Servicios</button>
@@ -24,12 +24,13 @@
             </div>
             <div class="campo">
                 <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" min="<?php echo date('Y-m-d',strtotime('+1 day'))?>">
+                <input type="date" id="fecha" min="<?php echo date('Y-m-d', strtotime('+1 day')) ?>">
             </div>
             <div class="campo">
                 <label for="hora">Hora:</label>
                 <input type="time" id="hora">
             </div>
+            <input type="hidden" id="id" value="<?php echo $id ?>">
         </form>
     </div>
     <div id="paso-3" class="seccion contenido-resumen">
@@ -44,12 +45,14 @@
             &laquo; Anterior
         </button>
         <button id="siguiente" class="boton">
-           Siguiente  &raquo; 
+            Siguiente &raquo;
         </button>
     </div>
 </div>
 <?php
     $script = "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
         <script src='build/js/app.js'></script>
+        
     ";
 ?>
