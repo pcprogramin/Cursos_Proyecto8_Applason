@@ -18,6 +18,12 @@ function isAuth():void{
         header('Location: /');
     }
 }
+function isAdmin():void{
+
+    if(is_null($_SESSION['admin'])){
+        header('Location:/');
+    }
+}
 
 function esUltimo ($actual,$proximo):bool{
     if ($actual !== $proximo){

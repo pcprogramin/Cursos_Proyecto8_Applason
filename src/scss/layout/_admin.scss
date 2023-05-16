@@ -17,3 +17,13 @@
         }
     }
 }
+.servicios{
+    @extend .citas-admin;
+    .acciones{
+        margin: 0;
+    }
+    .boton, 
+    .boton-eliminar{
+        margin: 0;
+    }
+}
